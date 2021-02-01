@@ -1,0 +1,156 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Test</title>
+</head>
+
+<body>
+    <button id="Open1" style="visibility: collapse;">Open 1 window</button>
+    <button id="Open2" style="visibility: collapse;">Open 2 windows</button>
+    <button id="Open3" style="visibility: collapse;">Open 3 windows</button>
+    <br/>
+    <br/>
+    <input id="numA" type="text"/>
+    <input id="numB" type="text"/>
+    <!-- <button id="CalcButton">调用dll计算</button> -->
+
+
+
+    <button id="idCardRead">读卡</button>
+</body>
+
+<script>
+    const electron = require("electron");
+    const exec = require('child_process').exec
+    const { dialog } = require('electron').remote;
+    console.log(dialog);
+    // remote.showErrorBox('title','content');
+    
+    // let BrowserWindow = electron.remote.BrowserWindow;
+    const { BrowserWindow } = require('electron');
+    
+    let Open1Window = null;
+    let Open2Window = null;
+    let Open3Window = null;
+
+    //call ffi test
+    const ffi = require("ffi-napi");
+
+    const myAddDll = new ffi.Library('D:/WorkSpace/vscode-workspace/CallDll/dll/myAddDll.dll', {
+    'funAdd': 
+        [
+        'int', ['int', 'int'], 
+        ],
+    });
+    
+    // document.getElementById("CalcButton").onclick = function(){
+    //     const result = myAddDll.funAdd(parseInt(document.getElementById("numA").value), 
+    //         parseInt(document.getElementById("numB").value));
+    //         // let {dialog}=require('electron');
+    //     dialog.showMessageBox({
+    //         type:'info',
+    //         title: '返回dll的运算结果',
+    //         message: result.toString(),
+    //         buttons:['ok','cancel']
+    //     },(index) => {
+    //     if ( index == 0 ) {
+    //         console.log('ok');
+    //     } else {
+    //         console.log('cancel');
+    //     }
+    //     })
+    // }
+
+    // const Termb = new ffi.Library('./dll/Dll1', {
+    //     'add':
+    //         [
+    //             'int',['int','int']
+    //         ],
+    // });
+
+    // const sdtapi = new ffi.Library('./dll/sdtapi.dll', {
+    //     'SDT_OpenPort':
+    //         [
+    //             'void*',['void*']
+    //         ],
+    // });
+
+
+
+    document.getElementById('idCardRead').onclick = function(){
+        // const result = Termb.GetPeopleName(1001);
+        // console.log(result);
+        const result2 = myAddDll.funAdd(1,2);
+        console.log(result2)
+    }
+
+
+    //...call ffi test
+    
+    document.getElementById("Open1").onclick = function(){
+
+        Open1Window = new BrowserWindow ({frame:true,fullscreen:false,x:0,y:0})
+
+        Open1Window.loadURL("http://192.168.3.98:8080/scada/video/preview/1");
+
+        Open1Window.on("close", function(){
+            Open1Window = null;
+            Open2Window = null;
+            Open3Window = null;
+        })
+    }
+
+    document.getElementById("Open2").onclick = function(){        
+
+        Open1Window = new BrowserWindow ({frame:true,fullscreen:false,x:0,y:0})
+
+        Open1Window.loadURL("http://192.168.3.98:8080/scada/video/preview/1");
+
+        Open1Window.on("close", function(){            
+            exec('taskkill /f /t /im WebControl.exe');            
+        })
+
+
+        Open2Window = new BrowserWindow ({frame:true,fullscreen:false,x:1680,y:0})
+
+        Open2Window.loadURL("http://192.168.3.98:8080/scada/video/preview/1");
+
+        Open2Window.on("close", function(){
+            exec('taskkill /f /t /im WebControl.exe');           
+        })
+    }
+
+    document.getElementById("Open3").onclick = function(){
+        
+        Open1Window = new BrowserWindow ({frame:true,fullscreen:true,x:0,y:0})
+
+        Open1Window.loadURL("http://192.168.3.98:8080/scada/video/preview/1");
+
+        Open1Window.on("close", function(){
+            exec('taskkill /f /t /im WebControl.exe'); 
+        })
+
+
+        Open2Window = new BrowserWindow ({frame:true,fullscreen:true,x:1680,y:0})
+
+        Open2Window.loadURL("http://192.168.3.98:8080/scada/video/preview/1");
+
+        Open2Window.on("close", function(){
+            exec('taskkill /f /t /im WebControl.exe'); 
+        })
+
+
+        Open3Window = new BrowserWindow ({frame:true,fullscreen:true,x:1680/2,y:0})
+
+        Open3Window.loadURL("http://192.168.3.98:8080/scada/video/preview/1");
+
+        Open3Window.on("close", function(){
+            exec('taskkill /f /t /im WebControl.exe'); 
+        })
+    }
+</script>
+
+</html>

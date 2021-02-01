@@ -1,0 +1,19 @@
+{
+  "name": "vtest",
+  "version": "1.0.0",
+  "description": "for yp",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "rebuild": "cd ./node_modules/.bin && electron-rebuild --force --module-dir=../../"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "electron": "^9.3.4",
+    "electron-builder": "^21.2.0",
+    "electron-rebuild": "^1.8.8",
+    "ffi-napi": "^2.4.5",
+    "nrm": "^1.2.1"
+  }
+}
